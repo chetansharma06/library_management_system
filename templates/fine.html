@@ -1,0 +1,11 @@
+<h2>Fine Page</h2>
+
+<p>Fine Amount: ₹{{fine}}</p>
+
+<form method="POST">
+    {% if fine > 0 %}
+    <input type="checkbox" name="paid"> Fine Paid<br><br>
+    {% endif %}
+
+    <button type="submit">Confirm</button>
+</form>

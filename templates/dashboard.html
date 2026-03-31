@@ -1,0 +1,11 @@
+<h2>Dashboard</h2>
+
+{% if role == "admin" %}
+<a href="/add_book">Add Book</a><br>
+<a href="/membership">Membership</a><br>
+<a href="/user">User Management</a><br>
+{% endif %}
+
+<a href="/search_book">Search Book</a><br>
+<a href="/issue_book">Issue Book</a><br>
+<a href="/return_book">Return Book</a>

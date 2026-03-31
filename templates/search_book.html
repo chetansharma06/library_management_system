@@ -1,0 +1,20 @@
+<h2>Search Book</h2>
+
+<form>
+<table border="1">
+<tr>
+    <th>Select</th>
+    <th>Book</th>
+    <th>Author</th>
+</tr>
+
+{% for book in books %}
+<tr>
+    <td><input type="radio" name="book" value="{{book[1]}}"></td>
+    <td>{{book[1]}}</td>
+    <td>{{book[2]}}</td>
+</tr>
+{% endfor %}
+
+</table>
+</form>
