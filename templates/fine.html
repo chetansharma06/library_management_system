@@ -1,11 +1,43 @@
-<h2>Fine Page</h2>
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto;">
+    <h2>Pay Fine</h2>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    
+    <div style="background:var(--background); padding:1rem; border-radius:8px; margin-bottom:1.5rem;">
+        <p><strong>Book Name:</strong> {{ issue.book_name }}</p>
+        <p><strong>Actual Issue Date:</strong> {{ issue.issue_date }}</p>
+        <p><strong>Expected Return Date:</strong> {{ issue.return_date }}</p>
+        <p><strong>Fine Calculated:</strong> ₹{{ fine }}</p>
+    </div>
 
-<p>Fine Amount: ₹{{fine}}</p>
+    <form method="POST" id="fineForm">
+        <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; font-weight:500;">
+            <input type="checkbox" name="paid" id="paidCheck" value="yes" style="width: auto;"> Paid Fine 
+            <span style="font-size:0.875rem; color:var(--text-muted);">(Checkbox implies Yes)</span>
+        </label>
+        
+        <div class="form-group">
+            <label>Remarks</label>
+            <input type="text" name="remarks">
+        </div>
+        
+        <button type="button" class="btn" onclick="validateFine({{ fine }})">Confirm Transaction</button>
+        <button type="submit" id="submitBtn" style="display:none;"></button>
+    </form>
+</div>
 
-<form method="POST">
-    {% if fine > 0 %}
-    <input type="checkbox" name="paid"> Fine Paid<br><br>
-    {% endif %}
-
-    <button type="submit">Confirm</button>
-</form>
+{% block scripts %}
+<script>
+function validateFine(fineAmt) {
+    if (fineAmt > 0) {
+        if (!document.getElementById('paidCheck').checked) {
+            alert("Error: For a pending fine, the Paid Fine check box needs to be selected to complete transaction.");
+            return;
+        }
+    }
+    document.getElementById('submitBtn').click();
+}
+</script>
+{% endblock %}
+{% endblock %}

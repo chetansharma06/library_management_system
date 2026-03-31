@@ -1,9 +1,75 @@
-<h2>Return Book</h2>
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h2>Return Book</h2>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    
+    <form method="POST" id="returnForm">
+        <div class="form-group">
+            <label>Serial No of Book (Mandatory)</label>
+            <div style="display: flex; gap: 1rem;">
+                <input type="text" name="serial_no" id="serial_no" required>
+                <button type="button" class="btn" style="width: auto;" onclick="fetchIssue()">Fetch details</button>
+            </div>
+            <div id="issueError" style="color:red; display:none; margin-top:0.5rem;">Issue transaction not found</div>
+        </div>
+    
+        <div class="form-group">
+            <label>Name of Book</label>
+            <input type="text" name="book_name" id="book_name" readonly required>
+        </div>
+        
+        <div class="form-group">
+            <label>Author</label>
+            <input type="text" name="author" id="author" readonly>
+        </div>
+        
+        <div class="form-group">
+            <label>Issue Date (Non editable)</label>
+            <input type="date" name="issue_date" id="issue_date" readonly>
+        </div>
+        
+        <div class="form-group">
+            <label>Return Date (Editable. Defaults to expected return)</label>
+            <input type="date" name="return_date" id="return_date" required>
+        </div>
+        
+        <button type="button" class="btn" onclick="validateReturn()">Confirm Return</button>
+        <button type="submit" id="submitBtn" style="display:none;"></button>
+    </form>
+</div>
 
-<form method="POST">
-    Book Name: <input type="text" name="book_name"><br><br>
+{% block scripts %}
+<script>
+async function fetchIssue() {
+    const serial = document.getElementById("serial_no").value;
+    if(!serial) return;
+    const res = await fetch("/api/book_by_serial/" + encodeURIComponent(serial));
+    const data = await res.json();
+    if(data.found) {
+        document.getElementById("book_name").value = data.book_name;
+        document.getElementById("author").value = data.author;
+        document.getElementById("issue_date").value = data.issue_date;
+        document.getElementById("return_date").value = data.return_date; // Actual selected date
+        document.getElementById("issueError").style.display = "none";
+    } else {
+        document.getElementById("book_name").value = "";
+        document.getElementById("author").value = "";
+        document.getElementById("issue_date").value = "";
+        document.getElementById("return_date").value = "";
+        document.getElementById("issueError").style.display = "block";
+    }
+}
 
-    Serial No: <input type="text" name="serial"><br><br>
-
-    <button type="submit">Return Book</button>
-</form>
+function validateReturn() {
+    const bn = document.getElementById('book_name').value;
+    const sn = document.getElementById('serial_no').value;
+    if(!bn || !sn) {
+        alert("Error: Please specify the serial number and fetch details to make a valid selection.");
+        return;
+    }
+    document.getElementById('submitBtn').click();
+}
+</script>
+{% endblock %}
+{% endblock %}

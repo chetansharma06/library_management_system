@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 2rem auto; text-align: center;">
+    <h2 style="color: var(--primary);">Application Flow Chart</h2>
+    
+    <div style="background: #F9FAFB; border: 1px solid var(--border); padding: 2rem; border-radius: 8px; margin: 1.5rem 0; text-align: left;">
+        <p style="margin-bottom: 1rem;"><strong>Notice:</strong> As per the specific placement assignment instructions:</p>
+        <blockquote style="border-left: 4px solid var(--primary); padding-left: 1rem; color: var(--text-muted); font-style: italic;">
+            "Chart link is on all pages to help navigate the user to the chart. It is not required in the working application."
+        </blockquote>
+    </div>
+    
+    <p>This page serves as the required clickable destination for the Flow Chart navigation link on all modules.</p>
+    
+    <a href="/dashboard" class="btn" style="margin-top: 1.5rem; width: auto;">Return to Dashboard</a>
+</div>
+{% endblock %}

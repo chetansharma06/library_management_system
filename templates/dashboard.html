@@ -1,11 +1,41 @@
-<h2>Dashboard</h2>
+{% extends "base.html" %}
 
-{% if role == "admin" %}
-<a href="/add_book">Add Book</a><br>
-<a href="/membership">Membership</a><br>
-<a href="/user">User Management</a><br>
-{% endif %}
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h2>Welcome to Library Management System</h2>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">Please navigate using the menu above.</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; text-align: left;">
+        
+        {% if role == 'admin' %}
+        <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.1rem; color: var(--primary);">Maintenance</h3>
+            <ul style="list-style-type: none; padding: 0;">
+                <li><a href="/add_book">Add Book/Movie</a></li>
+                <li><a href="/update_book">Update Book/Movie</a></li>
+                <li><a href="/membership">Add Membership</a></li>
+                <li><a href="/update_membership">Update Membership</a></li>
+                <li><a href="/user">User Management</a></li>
+            </ul>
+        </div>
+        {% endif %}
 
-<a href="/search_book">Search Book</a><br>
-<a href="/issue_book">Issue Book</a><br>
-<a href="/return_book">Return Book</a>
+        <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.1rem; color: var(--primary);">Reports</h3>
+            <ul style="list-style-type: none; padding: 0;">
+                <li><a href="/search_book">Search Book</a></li>
+            </ul>
+        </div>
+
+        <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.1rem; color: var(--primary);">Transactions</h3>
+            <ul style="list-style-type: none; padding: 0;">
+                <li><a href="/issue_book">Issue Book</a></li>
+                <li><a href="/return_book">Return Book</a></li>
+                <li><a href="/fine">Pay Fine</a></li>
+            </ul>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

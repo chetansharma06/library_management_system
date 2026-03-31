@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="card" style="max-width: 500px; margin: 0 auto;">
-    <h2>Add Book/Movie</h2>
+    <h2>Update Book/Movie</h2>
     {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
     
-    <form method="POST" id="addForm">
+    <form method="POST" id="updateForm">
         <div class="form-group radio-group">
             <label class="radio-label">
                 <input type="radio" name="type" value="Book" checked> Book
@@ -15,31 +15,30 @@
         </div>
         
         <div class="form-group">
-            <label>Name</label>
+            <label>Serial Number (Enter specific serial to update)</label>
+            <input type="text" name="serial_no" id="serial_no" required>
+        </div>
+        
+        <div class="form-group">
+            <label>New Name</label>
             <input type="text" name="name" id="name" required>
         </div>
         
         <div class="form-group">
-            <label>Author / Director</label>
+            <label>New Author / Director</label>
             <input type="text" name="author" id="author" required>
         </div>
         
-        <div class="form-group">
-            <label>Serial Number (Must be Unique)</label>
-            <input type="text" name="serial_no" id="serial_no" required>
-        </div>
-        
-        <button type="button" class="btn" onclick="validateForm()">Add</button>
-        <!-- hidden submit to trigger after validation -->
+        <button type="button" class="btn" onclick="validateUpdate()">Update</button>
         <button type="submit" id="submitBtn" style="display:none;"></button>
     </form>
 </div>
 
 {% block scripts %}
 <script>
-function validateForm() {
-    if (!document.getElementById('name').value || !document.getElementById('author').value || !document.getElementById('serial_no').value) {
-        alert("An error message: Please enter all mandatory details to confirm the form.");
+function validateUpdate() {
+    if (!document.getElementById('serial_no').value || !document.getElementById('name').value || !document.getElementById('author').value) {
+        alert("An error message: Please enter all details to confirm the form.");
     } else {
         document.getElementById('submitBtn').click();
     }

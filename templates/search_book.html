@@ -1,20 +1,62 @@
-<h2>Search Book</h2>
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <h2>Search Book Status</h2>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    
+    <form method="POST" id="searchForm" style="display: flex; gap: 1rem; align-items: flex-end; margin-bottom: 2rem;">
+        <div class="form-group" style="flex: 2; margin-bottom: 0;">
+            <label>Search Query</label>
+            <input type="text" name="query" id="query">
+        </div>
+        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+            <label>Search Target</label>
+            <select name="criteria" id="criteria">
+                <option value="">-- Select --</option>
+                <option value="Name">Book Name</option>
+                <option value="Author">Author Name</option>
+            </select>
+        </div>
+        <button type="button" class="btn" style="flex: 1; margin-bottom: 0;" onclick="validateSearch()">Search</button>
+        <button type="submit" id="submitSearch" style="display:none;"></button>
+    </form>
+    
+    {% if books %}
+    <h3>Search Results</h3>
+    <table>
+        <tr>
+            <th>Serial No</th>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Type</th>
+            <th>Select</th>
+        </tr>
+        {% for b in books %}
+        <tr>
+            <td>{{ b.serial_no }}</td>
+            <td>{{ b.name }}</td>
+            <td>{{ b.author }}</td>
+            <td>{{ b.type }}</td>
+            <td><input type="radio" name="selected_book_radio" value="{{ b.serial_no }}"></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% elif request.method == 'POST' and not error %}
+    <p>No available books found matching the search criteria.</p>
+    {% endif %}
+</div>
 
-<form>
-<table border="1">
-<tr>
-    <th>Select</th>
-    <th>Book</th>
-    <th>Author</th>
-</tr>
-
-{% for book in books %}
-<tr>
-    <td><input type="radio" name="book" value="{{book[1]}}"></td>
-    <td>{{book[1]}}</td>
-    <td>{{book[2]}}</td>
-</tr>
-{% endfor %}
-
-</table>
-</form>
+{% block scripts %}
+<script>
+function validateSearch() {
+    const query = document.getElementById('query').value;
+    const criteria = document.getElementById('criteria').value;
+    if(!query && !criteria) {
+        document.getElementById('searchForm').innerHTML += '<div class="alert alert-error" style="margin-top:1rem; width:100%;">Please fill in a text box or select a dropdown feature before submitting.</div>';
+    } else {
+        document.getElementById('submitSearch').click();
+    }
+}
+</script>
+{% endblock %}
+{% endblock %}

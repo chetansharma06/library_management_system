@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto;">
+    <h2>Update Membership</h2>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    
+    <form method="POST">
+        <div class="form-group">
+            <label>Membership Number</label>
+            <div style="display: flex; gap: 1rem;">
+                <input type="text" name="membership_number" id="membership_number" required>
+                <button type="button" class="btn" style="width: auto;" onclick="fetchMember()">Find</button>
+            </div>
+        </div>
+        
+        <div id="memberDetails" style="display: none; padding: 1rem; background: var(--background); border-radius: var(--radius); margin-bottom: 1.5rem;">
+            <p><strong>Name:</strong> <span id="m_name"></span></p>
+            <p><strong>Current Duration:</strong> <span id="m_duration"></span></p>
+            <p><strong>Status:</strong> <span id="m_status"></span></p>
+        </div>
+        
+        <div class="form-group radio-group">
+            <label class="radio-label"><input type="radio" name="action" value="Extend" checked> Extend (6 Months default)</label>
+            <label class="radio-label"><input type="radio" name="action" value="Cancel"> Cancel Membership</label>
+        </div>
+        
+        <button type="submit" class="btn">Confirm Action</button>
+    </form>
+</div>
+
+{% block scripts %}
+<script>
+async function fetchMember() {
+    const memNum = document.getElementById("membership_number").value;
+    if(!memNum) return;
+    const res = await fetch("/api/member/" + memNum);
+    const data = await res.json();
+    if(data.found) {
+        document.getElementById("m_name").innerText = data.name;
+        document.getElementById("m_duration").innerText = data.duration;
+        document.getElementById("m_status").innerText = data.status;
+        document.getElementById("memberDetails").style.display = "block";
+    } else {
+        alert("Member not found");
+        document.getElementById("memberDetails").style.display = "none";
+    }
+}
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/dashboard">Library Sys</a>
+        </div>
+        <div class="nav-links">
+            <div class="nav-menu">
+                {% if session.get('role') == 'admin' %}
+                <div class="dropdown">
+                    <button class="dropbtn">Maintenance</button>
+                    <div class="dropdown-content">
+                        <a href="/add_book">Add Book/Movie</a>
+                        <a href="/update_book">Update Book/Movie</a>
+                        <a href="/membership">Add Membership</a>
+                        <a href="/update_membership">Update Membership</a>
+                        <a href="/user">User Management</a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if session.get('role') %}
+                <div class="dropdown">
+                    <button class="dropbtn">Reports</button>
+                    <div class="dropdown-content">
+                        <a href="/search_book">Search Book</a>
+                        <!-- Additional reports can be added here -->
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button class="dropbtn">Transactions</button>
+                    <div class="dropdown-content">
+                        <a href="/issue_book">Issue Book</a>
+                        <a href="/return_book">Return Book</a>
+                        <a href="/fine">Pay Fine</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <!-- Chart Link placeholder required on all pages -->
+                <a href="/chart" style="font-size: 0.875rem; text-decoration: underline;">Flow Chart</a>
+                
+                {% if session.get('role') %}
+                <span style="font-size: 0.875rem; color: var(--text-muted);">Hi, {{ session.get('user_name', 'User') }}</span>
+                <a href="/logout" class="btn" style="padding: 0.5rem 1rem; width: auto; font-size: 0.875rem; border-radius: 6px;">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

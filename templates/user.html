@@ -1,12 +1,21 @@
-
-
-<h2>User Management</h2>
-
-<form method="POST">
-    Name: <input type="text" name="name"><br><br>
-
-    <input type="radio" name="type" value="new" checked> New User
-    <input type="radio" name="type" value="existing"> Existing User<br><br>
-
-    <button type="submit">Submit</button>
-</form>
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 0 auto;">
+    <h2>User Management</h2>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    
+    <form method="POST">
+        <div class="form-group radio-group">
+            <label class="radio-label"><input type="radio" name="user_status" value="NewUser" checked> New User</label>
+            <label class="radio-label"><input type="radio" name="user_status" value="ExistingUser"> Existing User</label>
+        </div>
+        
+        <div class="form-group">
+            <label>Name (Mandatory)</label>
+            <input type="text" name="name" required>
+        </div>
+        
+        <button type="submit" class="btn">Confirm</button>
+    </form>
+</div>
+{% endblock %}

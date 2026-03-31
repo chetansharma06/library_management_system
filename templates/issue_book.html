@@ -1,10 +1,88 @@
-<h2>Issue Book</h2>
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h2>Issue Book</h2>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    
+    <form method="POST" id="issueForm">
+        <div class="form-group">
+            <label>Name of Book (Type & Click Find)</label>
+            <div style="display: flex; gap: 1rem;">
+                <input type="text" name="book_name" id="book_name" required>
+                <button type="button" class="btn" style="width: auto;" onclick="fetchBook()">Find</button>
+            </div>
+            <div id="bookError" style="color:red; display:none; margin-top:0.5rem;">Book not available</div>
+        </div>
+        
+        <div class="form-group">
+            <label>Author</label>
+            <input type="text" name="author" id="author" readonly required>
+        </div>
+        
+        <div class="form-group" style="display:none;">
+            <label>Serial No</label>
+            <input type="text" name="serial_no" id="serial_no" readonly>
+        </div>
+        
+        <div class="form-group">
+            <label>Issue Date (Cannot be lesser than today)</label>
+            <input type="date" name="issue_date" id="issue_date" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Return Date (Populated 15 days ahead, editable up to 15 days)</label>
+            <input type="date" name="return_date" id="return_date" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Remarks (Non-mandatory)</label>
+            <input type="text" name="remarks">
+        </div>
+        
+        <button type="button" class="btn" onclick="validateIssue()">Confirm Issue</button>
+        <button type="submit" id="submitBtn" style="display:none;"></button>
+    </form>
+</div>
 
-<form method="POST">
-    Book Name: <input type="text" name="book_name"><br><br>
+{% block scripts %}
+<script>
+// Logic to populate dates
+const today = new Date();
+const todayStr = today.toISOString().split('T')[0];
+document.getElementById('issue_date').value = todayStr;
+document.getElementById('issue_date').min = todayStr;
 
-    <!-- Ye sirf show ke liye hai -->
-    Author: <input type="text" value="Auto filled after submit" readonly><br><br>
+const returnD = new Date(today);
+returnD.setDate(returnD.getDate() + 15);
+const returnStr = returnD.toISOString().split('T')[0];
+document.getElementById('return_date').value = returnStr;
 
-    <button type="submit">Issue Book</button>
-</form>
+// Fetch book details
+async function fetchBook() {
+    const bookName = document.getElementById("book_name").value;
+    if(!bookName) return;
+    const res = await fetch("/api/book/" + encodeURIComponent(bookName));
+    const data = await res.json();
+    if(data.found) {
+        document.getElementById("author").value = data.author;
+        document.getElementById("serial_no").value = data.serial_no;
+        document.getElementById("bookError").style.display = "none";
+    } else {
+        document.getElementById("author").value = "";
+        document.getElementById("serial_no").value = "";
+        document.getElementById("bookError").style.display = "block";
+    }
+}
+
+function validateIssue() {
+    const bn = document.getElementById('book_name').value;
+    const au = document.getElementById('author').value;
+    if(!bn || !au) {
+        alert("Error: Please make a valid selection of the book.");
+        return;
+    }
+    document.getElementById('submitBtn').click();
+}
+</script>
+{% endblock %}
+{% endblock %}
